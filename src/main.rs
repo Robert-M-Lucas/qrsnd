@@ -9,7 +9,6 @@ use qrrs::qrcode::{make_code, print_code_to_term, QrCodeViewArguments};
 use rocket::http::ContentType;
 use rocket::log::LogLevel;
 use rocket::response::content::RawHtml;
-use rocket::response::Redirect;
 use rocket_multipart_form_data::{multer, MultipartFormData, MultipartFormDataError, MultipartFormDataField, MultipartFormDataOptions};
 use rocket_raw_response::mime::{STAR_STAR};
 
