@@ -1569,7 +1569,6 @@ name = "qrsnd"
 version = "0.1.0"
 dependencies = [
  "local-ip-address",
- "mime 0.3.17",
  "qrrs",
  "rocket 0.5.0",
  "rocket-multipart-form-data",
