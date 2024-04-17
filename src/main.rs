@@ -6,10 +6,12 @@ use rocket::{Config, Data};
 use std::fs;
 use local_ip_address::local_ip;
 use qrrs::qrcode::{make_code, print_code_to_term, QrCodeViewArguments};
+use rocket::data::{Limits, ToByteUnit};
 use rocket::http::ContentType;
 use rocket::log::LogLevel;
 use rocket::response::content::RawHtml;
 use rocket_multipart_form_data::{multer, MultipartFormData, MultipartFormDataError, MultipartFormDataField, MultipartFormDataOptions};
+use rocket_multipart_form_data::multer::bytes::buf::Limit;
 use rocket_raw_response::mime::{STAR_STAR};
 
 const INDEX_HTML: &'static str = include_str!("index.html");
@@ -22,9 +24,9 @@ fn index() -> RawHtml<String> {
 #[post("/upload", data = "<data>")]
 async fn upload(content_type: &ContentType, data: Data<'_>) -> Result<RawHtml<String>, &'static str> {
     let options = MultipartFormDataOptions {
-        max_data_bytes: 33 * 1024 * 1024,
+        max_data_bytes: 10.gibibytes().as_u64(),
         allowed_fields: vec![MultipartFormDataField::raw("file")
-            .size_limit(32 * 1024 * 1024)
+            .size_limit(10.gibibytes().as_u64())
             .content_type_by_string(Some(STAR_STAR))
             .unwrap()],
         ..MultipartFormDataOptions::default()
@@ -79,12 +81,21 @@ async fn main() {
 
     print_code_to_term(&make_code(&url).unwrap(), QrCodeViewArguments { margin: 2, invert_colors: false });
     println!("{}", &url);
+    println!("This is an unsecured connection. Don't send sensitive information - don't use on public WiFi!");
 
     fs::create_dir_all("uploads").unwrap();
 
     let config = Config {
         address: "0.0.0.0".parse().unwrap(),
         log_level: LogLevel::Off,
+        limits: Limits::new()
+            .limit("form", 10.gibibytes())
+            .limit("data-form", 10.gibibytes())
+            .limit("file", 10.gibibytes())
+            .limit("string", 10.gibibytes())
+            .limit("bytes", 10.gibibytes())
+            .limit("json", 10.gibibytes())
+            .limit("msgpack", 10.gibibytes()),
         ..Config::release_default()
     };
 
