@@ -83,8 +83,6 @@ async fn main() {
     println!("{}", &url);
     println!("This is an unsecured connection. Don't send sensitive information - don't use on public WiFi!");
 
-    fs::create_dir_all("uploads").unwrap();
-
     let config = Config {
         address: "0.0.0.0".parse().unwrap(),
         log_level: LogLevel::Off,
