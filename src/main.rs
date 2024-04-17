@@ -11,7 +11,6 @@ use rocket::http::ContentType;
 use rocket::log::LogLevel;
 use rocket::response::content::RawHtml;
 use rocket_multipart_form_data::{multer, MultipartFormData, MultipartFormDataError, MultipartFormDataField, MultipartFormDataOptions};
-use rocket_multipart_form_data::multer::bytes::buf::Limit;
 use rocket_raw_response::mime::{STAR_STAR};
 
 const INDEX_HTML: &'static str = include_str!("index.html");
