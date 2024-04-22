@@ -74,7 +74,14 @@ async fn upload(content_type: &ContentType, data: Data<'_>) -> Result<RawHtml<St
 
 #[main]
 async fn main() {
-    let local_ip = local_ip().unwrap();
+    let local_ip = match local_ip() {
+        Ok(ip) => ip,
+        Err(_) => {
+            println!("Failed to get local IP - are you connected to a network?");
+            return;
+        }
+    };
+
     let port = 8000u16;
     let url = format!("http://{}:{}", local_ip, port);
 
